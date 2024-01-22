@@ -6,21 +6,26 @@ import {MatCardModule} from "@angular/material/card";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {TodoSignalsService} from "../../services/todo-signals.service";
+import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import {HeaderComponent} from "../header/header.component";
 
 @Component({
   selector: 'app-todo-form',
   standalone: true,
-  imports: [CommonModule, FormsModule,
+  imports: [CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
-    MatInputModule],
+    MatInputModule,
+    MatDialogModule],
   templateUrl: './todo-form.component.html',
   styleUrls: ['./todo-form.component.scss']
 })
 export class TodoFormComponent {
   private todoSignalsService = inject(TodoSignalsService)
+  private dialogRefService = inject(MatDialogRef<HeaderComponent>)
   public allTasks = this.todoSignalsService.taskState()
   public todoForm = new FormGroup({
     title: new FormControl("", [Validators.required, Validators.minLength(3)]),
@@ -34,6 +39,10 @@ export class TodoFormComponent {
       const id = this.allTasks.length > 0 ? this.allTasks.length + 1 : 1;
       const done = false;
       this.todoSignalsService.updateTask({id, title, description, done})
+      this.dialogRefService.close()
     }
   }
+    public closeModal():void{
+      this.dialogRefService.close()
+    }
 }
