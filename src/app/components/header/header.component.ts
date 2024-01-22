@@ -14,4 +14,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 })
 export class HeaderComponent {
 
+  public openModal(): void{
+    alert('Abriu')
+  }
 }
