@@ -8,6 +8,7 @@ import {TodoSignalsService} from "../../services/todo-signals.service";
 import {TodoKeyLocalStorage} from "../../models/enum/todoKeyLocalStorage";
 import {Task} from "../../models/model/todo-model";
 
+
 @Component({
   selector: 'app-todo-card',
   standalone: true,
@@ -18,10 +19,11 @@ import {Task} from "../../models/model/todo-model";
 export class TodoCardComponent implements OnInit {
   private todoSignalsService = inject(TodoSignalsService)
   private todosSignal = this.todoSignalsService.taskState
-  private taskList = computed(() => this.todosSignal())
+  public taskList = computed(() => this.todosSignal())
 
   ngOnInit(): void {
     this.getTaskLocalStorage()
+    console.log('Lista', this.taskList)
   }
 
   public handleDoneTask(task_id: number) {
@@ -29,7 +31,9 @@ export class TodoCardComponent implements OnInit {
       this.todosSignal.mutate((tasks) => {
         const taskSelected = tasks.find((task) => task?.id === task_id) as Task
         taskSelected && (taskSelected.done = true)
+
       })
+
     }
   }
 
@@ -54,4 +58,7 @@ export class TodoCardComponent implements OnInit {
     const taskData = localStorage.getItem(TodoKeyLocalStorage.TODO_LIST)
     taskData && (this.todosSignal.set(JSON.parse(taskData)))
   }
+
+
+
 }
